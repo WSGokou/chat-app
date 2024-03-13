@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 const Schema = mongoose.Schema;
 const ObjectId = Schema.ObjectId;
 
-const Message = new Schema({
+const messageSchema = new Schema({
   id: ObjectId,
   sender: String,
   receipient: String,
@@ -11,6 +11,6 @@ const Message = new Schema({
   timestamp: Date,
 });
 
-const MessageModel = mongoose.model('Message', Message);
+const Message = mongoose.model('Message', messageSchema);
 
-export default MessageModel;
+export default Message;

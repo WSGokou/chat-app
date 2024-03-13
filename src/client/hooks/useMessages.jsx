@@ -4,13 +4,13 @@ export const useMessages = () => {
   const [messages, setMessages] = useState([]);
 
   const fetchMessages = async () => {
-    const response = await fetch('/messages');
+    const response = await fetch('/api/messages');
     const newMessages = await response.json();
     setMessages(newMessages);
   };
 
   const createMessage = async (messageContent) => {
-    await fetch('/messages', {
+    await fetch('/api/messages', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -24,7 +24,7 @@ export const useMessages = () => {
   };
 
   const deleteMessage = async (messageId) => {
-    await fetch(`/messages/${messageId}`, {
+    await fetch(`/api/messages/${messageId}`, {
       method: 'DELETE',
     })
       .then((res) => res.json())

@@ -1,40 +1,45 @@
 import express from 'express';
+import {config} from 'dotenv';
 import ViteExpress from 'vite-express';
-import mongoose from 'mongoose';
 import cors from 'cors';
 import {createServer} from 'http';
 import {Server} from 'socket.io';
 
-import {config} from 'dotenv';
-config();
+import authRouter from './routes/auth.routes.js';
+import connectToMongoDB from './db/connectToMongoDB.js';
 
-import MessageModel from './models/Message.js';
-
-const PORT = process.env.PORT || 3000;
+import MessageModel from './models/message.model.js';
 
 const app = express();
-const httpServer = createServer(app);
-const io = new Server(httpServer, {
-  cors: {
-    origin: '*',
-  },
-});
+const PORT = process.env.PORT || 3000;
+
+config();
+
+app.use(express.json()); // for parsing application/json from the request body
+
+// const httpServer = createServer(app);
+// const io = new Server(httpServer, {
+//   cors: {
+//     origin: '*',
+//   },
+// });
 
 // app.use(cors);
-app.use(express.json());
 
-app.get('/hello', (req, res) => {
-  res.send('Hello Vite + Reactjj!');
-});
+// app.get('/hello', (req, res) => {
+//   res.send('Hello Vite + Reactjj!');
+// });
 
-app.get('/messages', async (req, res) => {
+app.use('/api/auth', authRouter);
+
+app.get('/api/messages', async (req, res) => {
   // TODO: Fetch messages from the database
   // only get messages between specific sender and receipient
   const messages = await MessageModel.find();
   res.json(messages);
 });
 
-app.post('/messages', async (req, res) => {
+app.post('/api/messages', async (req, res) => {
   const newMessage = new MessageModel({
     sender: 'Goku',
     receipient: 'Vegeta',
@@ -45,7 +50,7 @@ app.post('/messages', async (req, res) => {
   res.json(createdMessage);
 });
 
-app.delete('/messages/:id', async (req, res) => {
+app.delete('/api/messages/:id', async (req, res) => {
   const messageId = req.params.id;
 
   const deletedMessage = await MessageModel.findByIdAndDelete(messageId);
@@ -53,7 +58,7 @@ app.delete('/messages/:id', async (req, res) => {
   res.json(deletedMessage);
 });
 
-mongoose.connect(process.env.MONGO_URL).then(() => {
+connectToMongoDB().then(() => {
   ViteExpress.listen(app, PORT, () =>
     console.log(`Server is listening on port ${PORT}`),
   );
