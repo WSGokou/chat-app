@@ -2,36 +2,20 @@ import {useState} from 'react';
 import reactLogo from './assets/react.svg';
 import Header from './components/Header';
 import {useEffect} from 'react';
+import {useMessages} from './hooks/useMessages';
 
 function App() {
-  const [messages, setMessages] = useState([]);
+  const {messages, createMessage, deleteMessage} = useMessages();
   const [messageContent, setMessageContent] = useState('');
 
   const handleCreateMessage = async (e) => {
     e.preventDefault();
-    await fetch('/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({content: messageContent}),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log('Message Created:', data);
-        setMessageContent('');
-      });
+    await createMessage(messageContent);
   };
 
-  useEffect(() => {
-    const fetchMessages = async () => {
-      const response = await fetch('/messages');
-      const newMessages = await response.json();
-      setMessages(newMessages);
-    };
-
-    fetchMessages();
-  }, []);
+  const handleDeleteMessage = async (messageId) => {
+    await deleteMessage(messageId);
+  };
 
   return (
     <div className="App min-h-screen min-w-screen bg-slate-800">
