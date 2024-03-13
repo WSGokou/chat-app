@@ -8,6 +8,8 @@ import {Server} from 'socket.io';
 
 import authRouter from './routes/auth.routes.js';
 import messageRouter from './routes/message.routes.js';
+import userRouter from './routes/user.routes.js';
+
 import connectToMongoDB from './db/connectToMongoDB.js';
 
 import MessageModel from './models/message.model.js';
@@ -35,24 +37,7 @@ app.use(cookieParser()); // for parsing cookies from the request headers
 
 app.use('/api/auth', authRouter);
 app.use('/api/messages', messageRouter);
-
-app.get('/api/messages', async (req, res) => {
-  // TODO: Fetch messages from the database
-  // only get messages between specific sender and receipient
-  const messages = await MessageModel.find();
-  res.json(messages);
-});
-
-app.post('/api/messages', async (req, res) => {
-  const newMessage = new MessageModel({
-    sender: 'Goku',
-    receipient: 'Vegeta',
-    content: req.body.content,
-    timestamp: new Date(),
-  });
-  const createdMessage = await newMessage.save();
-  res.json(createdMessage);
-});
+app.use('/api/users', userRouter);
 
 app.delete('/api/messages/:id', async (req, res) => {
   const messageId = req.params.id;
