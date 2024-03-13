@@ -1,48 +1,83 @@
 import {useState} from 'react';
 import reactLogo from './assets/react.svg';
 import Header from './components/Header';
+import {useEffect} from 'react';
 
 function App() {
-  const [count, setCount] = useState(0);
+  const [messages, setMessages] = useState([]);
+  const [messageContent, setMessageContent] = useState('');
+
+  const handleCreateMessage = async (e) => {
+    e.preventDefault();
+    await fetch('/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({content: messageContent}),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log('Message Created:', data);
+        setMessageContent('');
+      });
+  };
+
+  useEffect(() => {
+    const fetchMessages = async () => {
+      const response = await fetch('/messages');
+      const newMessages = await response.json();
+      setMessages(newMessages);
+    };
+
+    fetchMessages();
+  }, []);
 
   return (
-    <div className="App">
-      <main className="Main-Container mt-5 flex flex-col items-center">
+    <div className="App min-h-screen min-w-screen bg-slate-800">
+      <main className="Main-Container pt-5 flex flex-col items-center">
         <Header />
-        <div>
-          <a
-            href="https://vitejs.dev"
-            target="_blank"
-          >
-            <img
-              src="/vite.svg"
-              className="logo"
-              alt="Vite logo"
-            />
-          </a>
-          <a
-            href="https://reactjs.org"
-            target="_blank"
-          >
-            <img
-              src={reactLogo}
-              className="logo react"
-              alt="React logo"
-            />
-          </a>
+        <div className="Messages-Container bg-slate-100 w-96">
+          <h2 className="text-2xl text-center">Messages</h2>
+          <ul className="w-full">
+            {/* Display message content in an array
+              1. Map through the messages array
+              2. For each message, create a list item with a paragraph tag
+              3. The paragraph tag should display the message content
+              4. Add a key attribute to the list item and set it to the message's _id
+              5. Add a conditional class to the paragraph tag
+              6. If the message's sender is current user, align the text to the right
+            */}
+            {messages.map((message) => (
+              <li key={message._id}>
+                <p
+                  className={`hover:text-blue-500 ${
+                    message.sender === 'Goku' && 'text-right'
+                  }`}
+                >
+                  {message.content}
+                </p>
+              </li>
+            ))}
+          </ul>
         </div>
-        <h1>Vite + React</h1>
-        <div className="card">
-          <button onClick={() => setCount((count) => count + 1)}>
-            count is now {count}
+        <form onSubmit={handleCreateMessage}>
+          <label
+            htmlFor="message-content"
+            className="text-lg"
+          >
+            Message
+          </label>
+          <input
+            id="message-content"
+            type="text"
+            value={messageContent}
+            onChange={(e) => setMessageContent(e.target.value)}
+          />
+          <button className="bg-blue-500 text-white px-3 py-1 rounded-md ml-2 hover:bg-blue-600 cursor-pointer">
+            Send
           </button>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test HMR!
-          </p>
-        </div>
-        <p className="read-the-docs">
-          Click on the Vite and React logos to learn more
-        </p>
+        </form>
       </main>
     </div>
   );

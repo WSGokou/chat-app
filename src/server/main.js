@@ -1,6 +1,7 @@
 import express from 'express';
 import ViteExpress from 'vite-express';
 import mongoose from 'mongoose';
+import cors from 'cors';
 
 import {config} from 'dotenv';
 config();
@@ -11,14 +12,18 @@ const PORT = 3000;
 
 const app = express();
 
+// app.use(cors);
 app.use(express.json());
 
 app.get('/hello', (req, res) => {
   res.send('Hello Vite + Reactjj!');
 });
 
-app.get('/messages', (req, res) => {
-  res.send('Get messages');
+app.get('/messages', async (req, res) => {
+  // TODO: Fetch messages from the database
+  // only get messages between specific sender and receipient
+  const messages = await MessageModel.find();
+  res.json(messages);
 });
 
 app.post('/messages', async (req, res) => {
