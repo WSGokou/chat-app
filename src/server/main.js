@@ -1,11 +1,13 @@
 import express from 'express';
 import {config} from 'dotenv';
+import cookieParser from 'cookie-parser';
 import ViteExpress from 'vite-express';
 import cors from 'cors';
 import {createServer} from 'http';
 import {Server} from 'socket.io';
 
 import authRouter from './routes/auth.routes.js';
+import messageRouter from './routes/message.routes.js';
 import connectToMongoDB from './db/connectToMongoDB.js';
 
 import MessageModel from './models/message.model.js';
@@ -16,6 +18,7 @@ const PORT = process.env.PORT || 3000;
 config();
 
 app.use(express.json()); // for parsing application/json from the request body
+app.use(cookieParser()); // for parsing cookies from the request headers
 
 // const httpServer = createServer(app);
 // const io = new Server(httpServer, {
@@ -31,6 +34,7 @@ app.use(express.json()); // for parsing application/json from the request body
 // });
 
 app.use('/api/auth', authRouter);
+app.use('/api/messages', messageRouter);
 
 app.get('/api/messages', async (req, res) => {
   // TODO: Fetch messages from the database
