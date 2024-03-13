@@ -16,7 +16,8 @@ const messageSchema = new Schema(
     },
     content: {type: String, required: true},
   },
-  {timestamps: true}, // Automatically create timestamps for createdAt and updatedAt
+  // createdAt, UpdatedAt
+  {timestamps: true},
 );
 
 const Message = mongoose.model('Message', messageSchema);
