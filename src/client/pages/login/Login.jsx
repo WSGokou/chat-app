@@ -36,7 +36,7 @@ const Login = () => {
               id="username"
               placeholder="Enter Username"
               className="w-full input input-bordered h-10"
-              value={username}
+              value={username.toLowerCase()}
               onChange={(e) => setUsername(e.target.value)}
             />
           </div>

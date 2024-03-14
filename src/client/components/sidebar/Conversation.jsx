@@ -22,7 +22,10 @@ const Conversation = ({conversation, lastIdx}) => {
 
         <div className="Username-container flex flex-col flex-1">
           <div className="flex gap-3 justify-between">
-            <p className="font-bold text-gray-200">{conversation.username}</p>
+            <p className="font-bold text-gray-200">
+              {conversation.username.charAt(0).toUpperCase() +
+                conversation.username.slice(1)}
+            </p>
           </div>
         </div>
       </div>

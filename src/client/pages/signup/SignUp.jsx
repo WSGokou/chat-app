@@ -41,7 +41,7 @@ const SignUp = () => {
               type="text"
               placeholder="Enter Username"
               className="w-full input input-bordered h-10"
-              value={inputs.username}
+              value={inputs.username.toLowerCase()}
               onChange={(e) => setInputs({...inputs, username: e.target.value})}
             />
           </div>
