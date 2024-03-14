@@ -18,14 +18,18 @@ const useSignup = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({username, password, confirmPassword}),
+        body: JSON.stringify({
+          username: username.toLowerCase(),
+          password,
+          confirmPassword,
+        }),
       });
 
       const data = await response.json();
       if (data.error) throw new Error(data.error);
 
       localStorage.setItem('chat-user', JSON.stringify(data));
-
+      setAuthUser(data);
       toast.success('User successfully created');
       return data;
     } catch (error) {
