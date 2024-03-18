@@ -3,11 +3,12 @@ import useConversation from '../../zustand/useConversation';
 
 const DeleteMessage = () => {
   const {deleteMessage} = useDeleteMessage();
-  const {selectedMessage} = useConversation();
+  const {selectedMessage, setSelectedMessage} = useConversation();
 
-  const handleDeleteMessage = (e) => {
+  const handleDeleteMessage = async (e) => {
     e.preventDefault();
-    deleteMessage(selectedMessage._id);
+    await deleteMessage(selectedMessage._id);
+    setSelectedMessage(null);
   };
 
   return (

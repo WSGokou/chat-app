@@ -3,6 +3,8 @@ import {useAuthContext} from './AuthContext';
 import {io} from 'socket.io-client';
 
 export const SocketContext = createContext();
+// const ioTarget = 'https://chat.gokou.co.uk';
+const ioTarget = 'http://localhost:3001';
 
 export const useSocketContext = () => {
   const context = useContext(SocketContext);
@@ -19,7 +21,7 @@ export const SocketContextProvider = ({children}) => {
 
   useEffect(() => {
     if (authUser) {
-      const socket = io('https://chat.gokou.co.uk', {
+      const socket = io(`${ioTarget}`, {
         withCredentials: true,
         query: {
           userId: authUser._id,

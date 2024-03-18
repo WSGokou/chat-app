@@ -15,6 +15,14 @@ const useListenMessages = () => {
       setMessages(messages.filter((message) => message._id !== messageId));
     });
 
+    socket?.on('editMessage', (updatedMessage) => {
+      setMessages(
+        messages.map((message) =>
+          message._id === updatedMessage._id ? updatedMessage : message,
+        ),
+      );
+    });
+
     return () => socket?.off('newMessage');
   }, [socket, setMessages, messages]);
 };
