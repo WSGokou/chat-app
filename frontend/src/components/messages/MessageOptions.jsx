@@ -1,3 +1,4 @@
+import {FaX} from 'react-icons/fa6';
 import useConversation from '../../zustand/useConversation';
 import DeleteMessage from './DeleteMessage';
 import EditMessage from './EditMessage';
@@ -6,15 +7,15 @@ const MessageOptions = () => {
   const {setSelectedMessage} = useConversation();
 
   return (
-    <div className="absolute bg-white rounded-xl p-2 z-50">
+    <div className="bg-slate-200 rounded-xl p-2 z-50 flex gap-2">
       <DeleteMessage />
       <EditMessage />
-      <p
-        className="cursor-pointer"
+      <div
+        className="cursor-pointer w-5 h-5"
         onClick={() => setSelectedMessage(null)}
       >
-        Cancel
-      </p>
+        <FaX className="w-full h-full" />
+      </div>
     </div>
   );
 };

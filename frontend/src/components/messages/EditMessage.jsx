@@ -1,3 +1,4 @@
+import {FaPen} from 'react-icons/fa6';
 import useConversation from '../../zustand/useConversation';
 
 const EditMessage = () => {
@@ -9,10 +10,10 @@ const EditMessage = () => {
 
   return (
     <div
-      className="cursor-pointer"
+      className="cursor-pointer w-5 h-5"
       onClick={handleEditMessage}
     >
-      <p>Edit</p>
+      <FaPen className="w-full h-full" />
     </div>
   );
 };

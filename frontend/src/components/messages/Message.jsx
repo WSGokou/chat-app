@@ -1,4 +1,4 @@
-import {FaRegCircleUser} from 'react-icons/fa6';
+import {FaPen, FaRegCircleUser} from 'react-icons/fa6';
 import {useAuthContext} from '../../context/AuthContext';
 import useConversation from '../../zustand/useConversation';
 import {timeConvert} from '../../utils/timeConvert';
@@ -12,8 +12,8 @@ const Message = ({message}) => {
   const fromMe = message.senderId === authUser._id;
   const formattedTime = timeConvert(message.createdAt);
   const chatClassName = fromMe ? 'chat-end' : 'chat-start';
-  const bubbleBgColor = fromMe ? 'bg-blue-500' : 'bg-gray-500';
-  const clickedMessage = selectedMessage?._id === message._id;
+  const bubbleBgColor = fromMe ? 'bg-blue-500 cursor-pointer' : 'bg-gray-500';
+  const clickedMessage = fromMe && selectedMessage?._id === message._id;
 
   const editingMessage = selectedMessage?.edit;
   const {editMessage} = useEditMessage();
@@ -68,10 +68,15 @@ const Message = ({message}) => {
           message.content
         )}
       </div>
-      <div className="chat-footer opacity-50 text-xs flex gap-1 items-center">
-        {formattedTime}
+      <div
+        className={`chat-footer opacity-50 text-xs flex gap-1 items-center ${
+          fromMe && 'flex-row-reverse'
+        }`}
+      >
+        <p>{formattedTime}</p>
+        <p>{message.createdAt !== message.updatedAt && <FaPen />}</p>
       </div>
-      {clickedMessage && <MessageOptions />}
+      <div className="absolute">{clickedMessage && <MessageOptions />}</div>
     </div>
   );
 };
